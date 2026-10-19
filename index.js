@@ -61,7 +61,7 @@ app.put('/biodata/:id', (req, res) => {
             }
 
             res.json({
-                message: "Data berhasil diupdate",
+                message: "Data berhasil dihapus",
                 data: result.rows[0]
             });
         })
@@ -71,7 +71,17 @@ app.put('/biodata/:id', (req, res) => {
         });
 });
 
+// DELETE (Hapus Data)
+app.delete('/biodata/:id', (req, res) => {
+    const { id } = req.params;
 
+    pool.query(
+        'DELETE FROM biodata WHERE id=$1 RETURNING *',
+        [id]
+    )
+        .then(result => res.json(result.rows[0]))
+        .catch(err => console.error(err));
+});
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
